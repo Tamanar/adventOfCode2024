@@ -3,9 +3,10 @@ with open("day2input.txt", "r") as f:
 documentplit = all_document.splitlines()
 
 list1 = []
-unsafe = 0
-for line in documentplit:
-    lineInt = [int(stringInList) for stringInList in line.split(" ")]
+
+
+def safe(listToTest: list) -> bool:
+    unsafe = True
     lastNumber = lineInt[0]
     if lineInt[1] - lineInt[0] > 0:
         IsIncreasing = True
@@ -14,14 +15,22 @@ for line in documentplit:
     for number in lineInt[1:]:
 
         if lastNumber == number:
-            unsafe += 1
+            unsafe = False
             break
         diff = abs(lastNumber - number)
         if not (1 <= diff <= 3):
-            unsafe += 1
+            unsafe = False
             break
         if (number - lastNumber > 0) != IsIncreasing:
-            unsafe += 1
+            unsafe = False
             break
         lastNumber = number
+    return unsafe
+
+
+unsafe = 0
+for line in documentplit:
+    lineInt = [int(stringInList) for stringInList in line.split(" ")]
+    if not (safe(lineInt)):
+        unsafe += 1
 print(len(documentplit) - unsafe)
