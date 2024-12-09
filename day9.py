@@ -16,40 +16,74 @@ def create_space(line):
     isFile = True
     for zipData in line:
         if isFile:
+            strConcat = ""
             for numberOfData in range(int(zipData)):
-                unzip_list.append(counter)
+                strConcat += str(counter)
+            unzip_list.append((strConcat))
             counter += 1
             isFile = False
         else:
+            strConcat = ""
             for numberOfPoint in range(int(zipData)):
-                unzip_list.append(".")
+                strConcat += "."
+            if strConcat != "":
+                unzip_list.append(strConcat)
             isFile = True
     return unzip_list
 
 
-def rearrange(unzip_list):
+def rearrange(unzip_list: list):
     for index in range(len(unzip_list)):
-        if unzip_list[index] == ".":
+        print(f"{index}/{len(unzip_list)}")
+        if "." in unzip_list[index]:
             for indexInverse in range(len(unzip_list) - 1, -1, -1):
                 if indexInverse < index:
                     break
                 else:
-                    if unzip_list[indexInverse] != ".":
-                        unzip_list[index], unzip_list[indexInverse] = (
-                            unzip_list[indexInverse],
-                            unzip_list[index],
-                        )
-                        break
-    return unzip_list
+
+                    if not ("." in unzip_list[indexInverse]):
+                        if len(unzip_list[index]) >= len(str(unzip_list[indexInverse])):
+                            partToCut = unzip_list[index][
+                                : len(str(unzip_list[indexInverse]))
+                            ]
+                            partToKeep = unzip_list[index][
+                                len(str(unzip_list[indexInverse])) :
+                            ]
+                            unzip_list.pop(index)
+                            # unzip_list.insert(index, unzip_list[indexInverse])
+                            unzip_list.insert(index, unzip_list[indexInverse - 1])
+                            unzip_list.insert(index + 1, partToKeep)
+                            unzip_list.pop(indexInverse + 1)
+                            unzip_list.insert(indexInverse + 1, partToCut)
+                            break
+            # for indexUnzip_list in range(len(unzip_list)):
+            #    try:
+            #        if (
+            #            "." in unzip_list[indexUnzip_list + 1]
+            #            and "." in unzip_list[indexUnzip_list]
+            #        ):
+            #            dotPlusOne = unzip_list.pop(indexUnzip_list + 1)
+            #            unzip_list[indexUnzip_list] += dotPlusOne
+            #    except:
+            #        break
+    rearrangeList = []
+    for thing in unzip_list:
+        if thing != "":
+            rearrangeList.append(thing)
+    return rearrangeList
 
 
 def check_sum(listRearrange):
     checkSum = 0
-    for index in range(len(listRearrange)):
-        if listRearrange[index] == ".":
-            break
+    counter = 0
+    for numberOrString in listRearrange:
+        if not ("." in numberOrString):
+            for number in range(len(str(numberOrString))):
+                checkSum += counter * int(str(numberOrString)[0])
+                counter += 1
         else:
-            checkSum += index * listRearrange[index]
+            for sizeDot in numberOrString:
+                counter += 1
     return checkSum
 
 
