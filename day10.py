@@ -1,5 +1,5 @@
 counterNine = 0
-posNine = {}
+posNine = []
 
 
 def main():
@@ -26,7 +26,7 @@ def searchBehind(doc, posX, posY, step):
         newPosY = posY + mvmt[1]
         if 0 <= newPosX < len(doc) and 0 <= newPosY < len(doc[0]):
             if int(doc[newPosX][newPosY]) == 9 and step == 8:
-                posNine[f"[{newPosX}, {newPosY}]"] = 1
+                posNine.append([f"[{newPosX}, {newPosY}]"])
             elif int(doc[newPosX][newPosY]) == step + 1:
                 searchBehind(doc, newPosX, newPosY, step + 1)
     return
